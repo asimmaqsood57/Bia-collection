@@ -32,6 +32,7 @@ const Home = () => {
     fetchCategoryData();
     fetchSliderData();
     fetchPopularData();
+    console.log("p", popular);
   }, []);
 
   return (
