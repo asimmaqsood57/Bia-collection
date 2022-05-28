@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import { useState } from "react";
 
 const Container = styled.div`
   width: 100vw;
@@ -55,17 +56,79 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+  const initialValue = {
+    name: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    password: "",
+    cpassword: "",
+  };
+  const [userData, setUserData] = useState(initialValue);
+
+  const onChange = (e) => {
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log(userData);
+
+    const response = await fetch("http://localhost:3001/createuser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    console.log(response, "this is response");
+    setUserData(initialValue);
+    alert("Your Account is Created successfully");
+  };
+
   return (
     <Container>
       <Wrapper>
         <Title>CREATE AN ACCOUNT</Title>
-        <Form>
-          <Input placeholder="name" />
-          <Input placeholder="last name" />
-          <Input placeholder="username" />
-          <Input placeholder="email" />
-          <Input placeholder="password" />
-          <Input placeholder="confirm password" />
+        <Form onSubmit={handleSubmit}>
+          <Input
+            value={userData.name}
+            onChange={onChange}
+            name="name"
+            placeholder="name"
+          />
+          <Input
+            value={userData.lastName}
+            name="lastName"
+            onChange={onChange}
+            placeholder="last name"
+          />
+          <Input
+            value={userData.userName}
+            name="userName"
+            onChange={onChange}
+            placeholder="username"
+          />
+          <Input
+            value={userData.email}
+            onChange={onChange}
+            name="email"
+            placeholder="email"
+          />
+          <Input
+            value={userData.password}
+            name="password"
+            onChange={onChange}
+            placeholder="password"
+          />
+          <Input
+            value={userData.cpassword}
+            name="cpassword"
+            onChange={onChange}
+            placeholder="confirm password"
+          />
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>

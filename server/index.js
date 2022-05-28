@@ -3,6 +3,7 @@ const cors = require("cors");
 const sliderItem = require("./models/sliderItem");
 const popularProduct = require("./models/popularProduct");
 const category = require("./models/category");
+const User = require("./models/User");
 const app = express();
 const PORT = 3001 || process.env.PORT;
 
@@ -57,6 +58,37 @@ app.post("/insertpopularproduct", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+});
+app.post("/createuser", async (req, res) => {
+  const data = new User(req.body);
+
+  try {
+    await data.save().then((result) => {
+      console.log(result);
+      res.send("record inserted");
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+app.post("/login", async (req, res) => {
+  try {
+    const user = await User.findOne({ userName: req.body.userName });
+
+    console.log();
+    // const verfiyPass = await bcryptjs.compare(req.body.password, user.password);
+
+    if (user.password === req.body.password) {
+      console.log("you are logged in");
+      res.json({ user });
+    } else {
+      res.status(400).json("invalid credentials");
+    }
+
+    // const authToken = await jwt.sign(data, SECRET_KEY);
+  } catch (error) {
+    res.status(400).json(error);
   }
 });
 

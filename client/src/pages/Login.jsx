@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import { useState } from "react";
 
 const Container = styled.div`
   width: 100vw;
@@ -58,13 +59,56 @@ const Link = styled.a`
 `;
 
 const Login = () => {
+  const initialValue = {
+    userName: "",
+
+    password: "",
+  };
+  const [userData, setUserData] = useState(initialValue);
+
+  const onChange = (e) => {
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log(userData);
+
+    const response = await fetch("http://localhost:3001/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    console.log(response.status, "this is response");
+    setUserData(initialValue);
+    if (response.status === 400) {
+      alert("Invalid Credentials");
+    } else if (response.status === 200) {
+      alert("Your Account is logged in");
+    }
+  };
+
   return (
     <Container>
       <Wrapper>
         <Title>SIGN IN</Title>
-        <Form>
-          <Input placeholder="username" />
-          <Input placeholder="password" />
+        <Form onSubmit={handleSubmit}>
+          <Input
+            value={userData.userName}
+            onChange={onChange}
+            name="userName"
+            placeholder="username"
+          />
+          <Input
+            value={userData.password}
+            onChange={onChange}
+            name="password"
+            placeholder="password"
+          />
           <Button>LOGIN</Button>
           <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
           <Link>CREATE A NEW ACCOUNT</Link>

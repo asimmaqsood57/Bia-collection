@@ -13,7 +13,7 @@ const Products = ({ popular }) => {
   console.log(popular, "p");
   return (
     <Container>
-      {popular.map((item) => (
+      {popularProducts.map((item) => (
         <Product item={item} key={item.id} />
       ))}
     </Container>
