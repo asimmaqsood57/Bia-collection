@@ -3,6 +3,8 @@ import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import React from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import { useContext } from "react";
+import CartContext from "../store/cartcontext";
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
@@ -69,6 +71,7 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
+  const ctx = useContext(CartContext);
   return (
     <Container>
       <Wrapper>
@@ -97,7 +100,7 @@ const Navbar = () => {
 
           <MenuItem>
             <Link to="/cart">
-              <Badge badgeContent={4} color="primary">
+              <Badge badgeContent={ctx.cartItems} color="primary">
                 <ShoppingCartOutlined />
               </Badge>
             </Link>

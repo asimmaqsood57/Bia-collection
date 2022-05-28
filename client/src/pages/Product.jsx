@@ -5,6 +5,8 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
 import { mobile } from "../responsive";
+import React, { useContext } from "react";
+import CartContext from "../store/cartcontext";
 
 const Container = styled.div``;
 
@@ -116,6 +118,10 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+  const ctx = useContext(CartContext);
+
+  console.log("ctx", ctx);
+
   return (
     <Container>
       <Navbar />
@@ -158,7 +164,9 @@ const Product = () => {
               <Amount>1</Amount>
               <Add />
             </AmountContainer>
-            <Button>ADD TO CART</Button>
+            <Button onClick={() => ctx.setCartItems(ctx.cartItems + 1)}>
+              ADD TO CART
+            </Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>
