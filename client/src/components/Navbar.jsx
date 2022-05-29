@@ -6,7 +6,7 @@ import { mobile } from "../responsive";
 import { useContext } from "react";
 import CartContext from "../store/cartcontext";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   height: 60px;
   ${mobile({ height: "50px" })}
@@ -72,6 +72,13 @@ const MenuItem = styled.div`
 
 const Navbar = () => {
   const ctx = useContext(CartContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedIn");
+    navigate("/");
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -86,18 +93,24 @@ const Navbar = () => {
           <Logo>Bia's Collections</Logo>
         </Center>
         <Right>
-          <MenuItem>
-            <Link style={{ textDecoration: "none" }} to="/register">
-              {" "}
-              REGISTER
-            </Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to="/login" style={{ textDecoration: "none" }}>
-              SIGN IN
-            </Link>
-          </MenuItem>
-
+          {window.localStorage.getItem("loggedIn") === "true" ? (
+            <MenuItem onClick={handleLogout}>LOGOUT</MenuItem>
+          ) : (
+            <>
+              <MenuItem>
+                <Link style={{ textDecoration: "none" }} to="/register">
+                  {" "}
+                  REGISTER
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link style={{ textDecoration: "none" }} to="/login">
+                  {" "}
+                  SIGN IN
+                </Link>
+              </MenuItem>
+            </>
+          )}
           <MenuItem>
             <Link to="/cart">
               <Badge badgeContent={ctx.cartItems} color="primary">

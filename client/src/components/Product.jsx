@@ -69,7 +69,9 @@ const Icon = styled.div`
 
 const Product = ({ item }) => {
   return (
-    <Link to="/product">
+    <Link
+      to={`/product?item_img=${item.img}&title=${item.title}&price=${item.price}&description=${item.descriptionn}`}
+    >
       <Container>
         <Circle />
         <Image src={item.img} />

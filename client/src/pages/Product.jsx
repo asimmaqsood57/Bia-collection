@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
 import { mobile } from "../responsive";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import CartContext from "../store/cartcontext";
 
 const Container = styled.div``;
@@ -119,6 +119,21 @@ const Button = styled.button`
 
 const Product = () => {
   const ctx = useContext(CartContext);
+  const [qty, setQty] = useState(1);
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const img = urlParams.get("item_img");
+  const title = urlParams.get("title");
+  const price = urlParams.get("price");
+  const description = urlParams.get("description");
+
+  const item = {
+    title,
+    price: parseInt(price),
+    img,
+    description,
+    qty,
+  };
 
   console.log("ctx", ctx);
 
@@ -128,18 +143,12 @@ const Product = () => {
       <Announcement />
       <Wrapper>
         <ImgContainer>
-          <Image src="https://i.ibb.co/S6qMxwr/jean.jpg" />
+          <Image src={img} />
         </ImgContainer>
         <InfoContainer>
-          <Title>Denim Jumpsuit</Title>
-          <Desc>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at
-            iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget
-            tristique tortor pretium ut. Curabitur elit justo, consequat id
-            condimentum ac, volutpat ornare.
-          </Desc>
-          <Price>$ 20</Price>
+          <Title>{title}</Title>
+          <Desc>{description}</Desc>
+          <Price>$ {price}</Price>
           <FilterContainer>
             <Filter>
               <FilterTitle>Color</FilterTitle>
@@ -160,11 +169,16 @@ const Product = () => {
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <Remove />
-              <Amount>1</Amount>
-              <Add />
+              <Remove onClick={() => qty > 0 && setQty(qty - 1)} />
+              <Amount>{qty}</Amount>
+              <Add onClick={() => setQty(qty + 1)} />
             </AmountContainer>
-            <Button onClick={() => ctx.setCartItems(ctx.cartItems + 1)}>
+            <Button
+              onClick={() => {
+                ctx.setCartItems(ctx.cartItems + 1);
+                ctx.setCartItemsList([...ctx.cartItemsList, item]);
+              }}
+            >
               ADD TO CART
             </Button>
           </AddContainer>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -56,6 +56,7 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+  const navigate = useNavigate();
   const initialValue = {
     name: "",
     lastName: "",
@@ -84,8 +85,10 @@ const Register = () => {
     });
 
     console.log(response, "this is response");
+
     setUserData(initialValue);
-    alert("Your Account is Created successfully");
+    // alert("Your Account is Created successfully");
+    navigate("/login");
   };
 
   return (
@@ -120,12 +123,14 @@ const Register = () => {
           <Input
             value={userData.password}
             name="password"
+            type="password"
             onChange={onChange}
             placeholder="password"
           />
           <Input
             value={userData.cpassword}
             name="cpassword"
+            type="password"
             onChange={onChange}
             placeholder="confirm password"
           />

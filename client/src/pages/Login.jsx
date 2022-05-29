@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -70,6 +71,8 @@ const Login = () => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -88,7 +91,10 @@ const Login = () => {
     if (response.status === 400) {
       alert("Invalid Credentials");
     } else if (response.status === 200) {
-      alert("Your Account is logged in");
+      // alert("Your Account is logged in");
+      window.localStorage.setItem("loggedIn", "true");
+
+      navigate("/");
     }
   };
 
@@ -106,6 +112,7 @@ const Login = () => {
           <Input
             value={userData.password}
             onChange={onChange}
+            type="password"
             name="password"
             placeholder="password"
           />
